@@ -53,6 +53,7 @@ root.mainloop()
 - **.configure(...)**: change other table attributes
 
 _here, **other_options** means ctkbutton parameters_
+
 Note: treat all the table blocks as a ctkbutton class
 
 ## Arguments
