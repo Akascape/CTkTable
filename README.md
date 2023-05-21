@@ -11,8 +11,13 @@ Here is a quick and simple table widget having all the basic features.
 - Insert values to specific block
 - delete values from specific block
 - update all values at once
-- customize each block and fg-colors
-- lightweight widget class
+- customize each block and options
+- lightweight library
+
+## Installation
+### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkTable?&color=white&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkTable/archive/refs/heads/main.zip)
+
+**Download the source code, paste the `CTkTable` folder in the directory where your program is present.**
 
 ## Usage
 ```python
@@ -48,6 +53,7 @@ root.mainloop()
 - **.configure(...)**: change other table attributes
 
 _here, **other_options** means ctkbutton parameters_
+Note: treat all the table blocks as a ctkbutton class
 
 ## Arguments
 | Parameter | Description |
