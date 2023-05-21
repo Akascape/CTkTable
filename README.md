@@ -1,0 +1,2 @@
+# CTkTable
+Customtkinter Table widget
