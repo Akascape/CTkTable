@@ -41,8 +41,8 @@ root.mainloop()
 ## Methods
 - **.add_row(index, values)**
 - **.add_column(index, values)**
-- **.edit_row(row_num, other_options)**: edit one row at once
-- **.edit_column(column_num, other_options)**: edit one column at once
+- **.edit_row(row_num, other_options)**: edit one full row at once
+- **.edit_column(column_num, other_options)**: edit one full column at once
 - **.delete_row(index)**
 - **.delete_column(index)**
 - **.update_values(values)**: update all values at once
@@ -50,7 +50,7 @@ root.mainloop()
 - **.delete(row, column, other_options)**: delete the data from specific index
 - **.get()**: get all values
 - **.get_value(row, column)**: get specific value
-- **.configure(...)**: change other table attributes
+- **.configure(arguments)**: change other table attributes
 
 _here, **other_options** means ctkbutton parameters_
 
@@ -70,3 +70,5 @@ Note: treat all the table blocks as a ctkbutton class
 | header_color | define the topmost row color |
 | corner_radius | define the corner roundness of the table |
 | **other button parameters* | all other ctk button parameters can be passed |
+
+### Thanks for visiting! Hope it will help :)
