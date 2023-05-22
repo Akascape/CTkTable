@@ -63,8 +63,8 @@ Note: treat all the table blocks as a ctkbutton class
 | **values** | the default values for table |
 | row | **optional**, set number of default rows |
 | column | **optional**, set number of default columns |
-| padx | set padding in x between the blocks |
-| pady | set padding in y between the blocks |
+| padx | add internal padding in x |
+| pady | add internal padding in y |
 | colors | set two fg_colors for the table (list) |
 | color_phase | set color phase based on rows or columns |
 | header_color | define the topmost row color |
