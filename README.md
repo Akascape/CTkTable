@@ -69,7 +69,7 @@ Note: treat all the table blocks as a ctkbutton class
 | color_phase | set color phase based on rows or columns |
 | header_color | define the topmost row color |
 | corner_radius | define the corner roundness of the table |
-| **command** | specify a command when a table block is pressed, [returns row, column, value)
+| **command** | specify a command when a table block is pressed, [returns row, column, value] |
 | **other button parameters* | all other ctk button parameters can be passed |
 
 ### Thanks for visiting! Hope it will help :)
