@@ -41,6 +41,12 @@ class CTkTable(customtkinter.CTkFrame):
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if not self.colors[0] else self.colors[0]
         self.fg_color2 = customtkinter.ThemeManager.theme["CTkFrame"]["top_fg_color"] if not self.colors[1] else self.colors[1]
         
+        if self.colors[0] is None and self.colors[1] is None:
+            if self.fg_color==self.master.cget("fg_color"):
+                self.fg_color = customtkinter.ThemeManager.theme["CTk"]["fg_color"]
+            if self.fg_color2==self.master.cget("fg_color"):
+                self.fg_color2 = customtkinter.ThemeManager.theme["CTk"]["fg_color"]
+            
         self.frame = {}
         self.draw_table(**kwargs)
         
