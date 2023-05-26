@@ -19,6 +19,7 @@ class CTkTable(customtkinter.CTkFrame):
         color_phase: str = "rows",
         header_color: str = None,
         corner_radius: int = 25,
+        hover: bool = False,
         command = None,
         **kwargs):
         
@@ -35,6 +36,7 @@ class CTkTable(customtkinter.CTkFrame):
         self.header_color = header_color # specify the topmost row color
         self.phase = color_phase
         self.corner = corner_radius
+        self.hover = hover
         # if colors are None then use the default frame colors:
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if not self.colors[0] else self.colors[0]
         self.fg_color2 = customtkinter.ThemeManager.theme["CTkFrame"]["top_fg_color"] if not self.colors[1] else self.colors[1]
@@ -84,7 +86,7 @@ class CTkTable(customtkinter.CTkFrame):
                 self.data = {"row": i, "column" : j, "value" : value}
                 self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners,
                                                           corner_radius=corner_radius,
-                                                          fg_color=fg, hover=False, text=value,
+                                                          fg_color=fg, hover=self.hover, text=value,
                                                           command=(lambda e=self.data: self.command(e)) if self.command else None, **kwargs)
                 self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
                 
