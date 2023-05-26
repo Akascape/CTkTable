@@ -19,6 +19,7 @@ class CTkTable(customtkinter.CTkFrame):
         color_phase: str = "rows",
         header_color: str = None,
         corner_radius: int = 25,
+        command = None,
         **kwargs):
         
         super().__init__(master, fg_color="transparent")
@@ -27,7 +28,8 @@ class CTkTable(customtkinter.CTkFrame):
         self.rows = row if row else len(values) # number of default rows
         self.columns = column if column else len(values[0])# number of default columns
         self.padx = padx # internal padding between the rows/columns
-        self.pady = pady 
+        self.pady = pady
+        self.command = command
         self.values = values # the default values of the table
         self.colors = colors # colors of the table if required
         self.header_color = header_color # specify the topmost row color
@@ -79,8 +81,10 @@ class CTkTable(customtkinter.CTkFrame):
                 else:
                     value = " "
 
-                self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners, corner_radius=corner_radius,
-                                                          fg_color=fg, hover=False, text=value, **kwargs)
+                self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners,
+                                                          corner_radius=corner_radius,
+                                                          fg_color=fg, hover=False, text=value,
+                                                          command=(lambda a=i, b=j, c=value: self.command(a, b, c)) if self.command else None, **kwargs)
                 self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
                 
                 self.rowconfigure(i, weight=1)
