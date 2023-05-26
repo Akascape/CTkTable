@@ -66,8 +66,8 @@ Note: treat all the table blocks as a ctkbutton class
 | column | **optional**, set number of default columns |
 | padx | add internal padding in x |
 | pady | add internal padding in y |
-| colors | set two fg_colors for the table (list) |
-| color_phase | set color phase based on rows or columns |
+| colors | set two fg_colors for the table (list), eg: `colors=["yellow", "green"]` |
+| color_phase | set color phase based on rows or columns, eg `color_phase="column"` |
 | header_color | define the topmost row color |
 | corner_radius | define the corner roundness of the table |
 | hover | enable hover effect on the blocks |
