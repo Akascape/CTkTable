@@ -11,7 +11,7 @@ Here is a quick and simple table widget having all the basic features.
 - Insert values to specific block
 - delete values from specific block
 - update all values at once
-- customize each block and options
+- edit each block value and options
 - lightweight library
 - can be used with scrollable frame
 
