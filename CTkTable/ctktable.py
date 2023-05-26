@@ -80,11 +80,12 @@ class CTkTable(customtkinter.CTkFrame):
                     except IndexError: value = " "
                 else:
                     value = " "
-
+                    
+                self.data = {"row": i, "column" : j, "value" : value}
                 self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners,
                                                           corner_radius=corner_radius,
                                                           fg_color=fg, hover=False, text=value,
-                                                          command=(lambda a=i, b=j, c=value: self.command(a, b, c)) if self.command else None, **kwargs)
+                                                          command=(lambda e=self.data: self.command(e)) if self.command else None, **kwargs)
                 self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
                 
                 self.rowconfigure(i, weight=1)
