@@ -8,10 +8,10 @@ Here is a quick and simple table widget having all the basic features.
 - Add columns/rows
 - Delete columns/rows
 - Edit rows/columns at once
-- Insert values to specific block
-- delete values from specific block
+- Insert values to specific cell
+- delete values from specific cell
 - update all values at once
-- edit each block value and options
+- edit each cell value and options
 - lightweight library
 - can be used with scrollable frame
 
@@ -55,7 +55,7 @@ root.mainloop()
 
 _here, **other_options** means ctkbutton parameters_
 
-Note: treat all the table blocks as a ctkbutton class
+**Note: treat all the table cells as a ctkbutton class**
 
 ## Arguments
 | Parameter | Description |
@@ -70,8 +70,8 @@ Note: treat all the table blocks as a ctkbutton class
 | color_phase | set color phase based on rows or columns, eg: `color_phase="column"` |
 | header_color | define the topmost row color |
 | corner_radius | define the corner roundness of the table |
-| hover | enable hover effect on the blocks |
-| **command** | specify a command when a table block is pressed, [returns row, column, value] |
+| hover | enable hover effect on the cells |
+| **command** | specify a command when a table cell is pressed, [returns row, column, value] |
 | **other button parameters* | all other ctk button parameters can be passed |
 
 ### Thanks for visiting! Hope it will help :)
