@@ -74,4 +74,5 @@ _here, **other_options** means ctkbutton parameters_
 | **command** | specify a command when a table cell is pressed, [returns row, column, value] |
 | **other button parameters* | all other ctk button parameters can be passed |
 
+Note: This library is at early stage so there can be some performance issues. 
 ### Thanks for visiting! Hope it will help :)
