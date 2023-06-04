@@ -193,7 +193,7 @@ class CTkTable(customtkinter.CTkFrame):
         if "columns" in kwargs:
             self.columns = kwargs.pop("columns")
         if "values" in kwargs:
-            self.values = values
+            self.values = kwargs.pop("values")
         if "padx" in kwargs:
             self.padx = kwargs.pop("padx")
         if "padx" in kwargs:
