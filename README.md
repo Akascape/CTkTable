@@ -42,18 +42,18 @@ root.mainloop()
 ## Methods
 - **.add_row(index, values)**
 - **.add_column(index, values)**
-- **.edit_row(row_num, *other_options)**: edit one full row at once
-- **.edit_column(column_num, *other_options)**: edit one full column at once
+- **.edit_row(row_num, *args)**: edit one full row at once
+- **.edit_column(column_num, *argss)**: edit one full column at once
 - **.delete_row(index)**
 - **.delete_column(index)**
 - **.update_values(values)**: update all values at once
-- **.insert(row, column, value, *other_options)**: change specific index data
-- **.delete(row, column, *other_options)**: delete the data from specific index
+- **.insert(row, column, value, *args)**: change specific index data
+- **.delete(row, column, *args)**: delete the data from specific index
 - **.get()**: get all values
 - **.get_value(row, column)**: get specific value
 - **.configure(arguments)**: change other table attributes
 
-_here, **other_options** means ctkbutton parameters_
+_here, **args** means ctkbutton parameters which can also be passed_
 
 **Note: treat all the table cells as a ctkbutton class**
 
