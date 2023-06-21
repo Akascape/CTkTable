@@ -45,7 +45,7 @@ root.mainloop()
 - **.add_row(index, values)**
 - **.add_column(index, values)**
 - **.edit_row(row_num, *args)**: edit one full row at once
-- **.edit_column(column_num, *argss)**: edit one full column at once
+- **.edit_column(column_num, *args)**: edit one full column at once
 - **.delete_row(index)**
 - **.delete_column(index)**
 - **.update_values(values)**: update all values at once
