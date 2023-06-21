@@ -16,9 +16,11 @@ Here is a quick and simple table widget having all the basic features.
 - can be used with scrollable frame
 
 ## Installation
-### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkTable?&color=white&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkTable/archive/refs/heads/main.zip)
+```
+pip install CTkTable
+```
 
-**Download the source code, paste the `CTkTable` folder in the directory where your program is present.**
+### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkTable?&color=white&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkTable/archive/refs/heads/main.zip)
 
 ## Usage
 ```python
