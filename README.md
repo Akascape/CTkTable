@@ -1,6 +1,6 @@
 # CTkTable
 
-Here is a quick and simple table widget having all the basic features. 
+**Here is a quick and simple table widget having all the basic features.**
 
 ![Screenshot](https://user-images.githubusercontent.com/89206401/233420929-bf210cb3-5b5f-49b2-ba7a-f01d187e72cf.jpg)
 
