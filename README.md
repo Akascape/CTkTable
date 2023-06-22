@@ -12,7 +12,7 @@ Here is a quick and simple table widget having all the basic features.
 - delete values from specific cell
 - update all values at once
 - edit each cell value and options
-- lightweight library
+- entry editing
 - can be used with scrollable frame
 
 ## Installation
@@ -52,7 +52,6 @@ root.mainloop()
 - **.insert(row, column, value, *args)**: change specific index data
 - **.delete(row, column, *args)**: delete the data from specific index
 - **.get()**: get all values
-- **.get_value(row, column)**: get specific value
 - **.configure(arguments)**: change other table attributes
 
 _here, **args** means ctkbutton parameters which can also be passed_
@@ -69,10 +68,10 @@ _here, **args** means ctkbutton parameters which can also be passed_
 | padx | add internal padding in x |
 | pady | add internal padding in y |
 | colors | set two fg_colors for the table (list), eg: `colors=["yellow", "green"]` |
-| color_phase | set color phase based on rows or columns, eg: `color_phase="column"` |
+| color_phase | set color phase based on rows or columns, eg: `color_phase="vertical"` |
 | header_color | define the topmost row color |
 | corner_radius | define the corner roundness of the table |
-| hover | enable hover effect on the cells |
+| hover_color | enable hover effect on the cells |
 | **command** | specify a command when a table cell is pressed, [returns row, column, value] |
 | **other button parameters* | all other ctk button parameters can be passed |
 
