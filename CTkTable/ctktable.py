@@ -16,11 +16,14 @@ class CTkTable(customtkinter.CTkFrame):
         pady: int = 0,
         values: list = [[None]],
         colors: list = [None, None],
+        orientation: str = "horizontal",
         color_phase: str = "horizontal",
         header_color: str = None,
         corner_radius: int = 25,
         write: str = False,
         command = None,
+        anchor = "c",
+        hover_color = None,
         hover = False,
         **kwargs):
         
@@ -37,8 +40,12 @@ class CTkTable(customtkinter.CTkFrame):
         self.header_color = header_color # specify the topmost row color
         self.phase = color_phase
         self.corner = corner_radius
-        self.hover = hover
         self.write = write
+        if hover_color:
+            hover=True
+        self.hover = hover
+        self.hover_color = customtkinter.ThemeManager.theme["CTkButton"]["hover_color"] if hover_color is None else hover_color
+        self.orient = orientation
         # if colors are None then use the default frame colors:
         self.data = {}
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if not self.colors[0] else self.colors[0]
@@ -54,7 +61,7 @@ class CTkTable(customtkinter.CTkFrame):
         self.draw_table(**kwargs)
         
     def draw_table(self, **kwargs):
-
+        
         """ draw the table """
         for i in range(self.rows):
             for j in range(self.columns):
@@ -70,11 +77,12 @@ class CTkTable(customtkinter.CTkFrame):
                         fg = self.fg_color2
                         
                 if self.header_color:
-                    if i==0:
-                        fg = self.header_color
-                        
-                if "hover_color" in kwargs:
-                    self.hover = True
+                    if self.orient=="horizontal":
+                        if i==0:
+                            fg = self.header_color
+                    else:
+                        if j==0:
+                            fg = self.header_color
 
                 corner_radius = self.corner    
                 if i==0 and j==0:
@@ -91,7 +99,10 @@ class CTkTable(customtkinter.CTkFrame):
                     
                 if self.values:
                     try:
-                        value = self.values[i][j]
+                        if self.orient=="horizontal":
+                            value = self.values[i][j]
+                        else:
+                            value = self.values[j][i]
                     except IndexError: value = " "
                 else:
                     value = " "
@@ -103,7 +114,7 @@ class CTkTable(customtkinter.CTkFrame):
                         args = kwargs
                 else:
                     args = kwargs
-                    
+                
                 self.data[i,j] = {"row": i, "column" : j, "value" : value, "args": args }
               
                 args = self.data[i,j]["args"]
@@ -123,7 +134,7 @@ class CTkTable(customtkinter.CTkFrame):
                 else:
                     self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners,
                                                               corner_radius=corner_radius, hover=self.hover,
-                                                              fg_color=fg, text=value,
+                                                              fg_color=fg, text=value, hover_color=self.hover_color,
                                                               command=(lambda e=self.data[i,j]: self.command(e)) if self.command else None, **args)
                     self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
                 
@@ -185,7 +196,7 @@ class CTkTable(customtkinter.CTkFrame):
             self.values.insert(index, values)
             self.rows+=1
         except IndexError: pass
-    
+ 
         self.draw_table(**kwargs)
         self.update_data()
         
