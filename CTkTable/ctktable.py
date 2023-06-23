@@ -19,9 +19,9 @@ class CTkTable(customtkinter.CTkFrame):
         color_phase: str = "horizontal",
         header_color: str = None,
         corner_radius: int = 25,
-        hover_color: str = None,
         write: str = False,
         command = None,
+        hover = False,
         **kwargs):
         
         super().__init__(master, fg_color="transparent")
@@ -37,7 +37,7 @@ class CTkTable(customtkinter.CTkFrame):
         self.header_color = header_color # specify the topmost row color
         self.phase = color_phase
         self.corner = corner_radius
-        self.hover_color = hover_color
+        self.hover = hover
         self.write = write
         # if colors are None then use the default frame colors:
         self.data = {}
@@ -73,13 +73,9 @@ class CTkTable(customtkinter.CTkFrame):
                     if i==0:
                         fg = self.header_color
                         
-                if not self.hover_color:
-                    hover_color = fg
-                    hover = False
-                else:
-                    hover_color = self.hover_color
-                    hover = True
-                    
+                if "hover_color" in kwargs:
+                    self.hover = True
+
                 corner_radius = self.corner    
                 if i==0 and j==0:
                     corners = ["", fg, fg, fg]
@@ -126,8 +122,8 @@ class CTkTable(customtkinter.CTkFrame):
     
                 else:
                     self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners,
-                                                              corner_radius=corner_radius, hover=hover,
-                                                              fg_color=fg, hover_color=hover_color, text=value,
+                                                              corner_radius=corner_radius, hover=self.hover,
+                                                              fg_color=fg, text=value,
                                                               command=(lambda e=self.data[i,j]: self.command(e)) if self.command else None, **args)
                     self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
                 
