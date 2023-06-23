@@ -129,15 +129,23 @@ class CTkTable(customtkinter.CTkFrame):
                     args = kwargs
                 
                 self.data[i,j] = {"row": i, "column" : j, "value" : value, "args": args }
-              
+                
                 args = self.data[i,j]["args"]
                 
+
+                if "text_color" not in args:
+                    args["text_color"] = self.text_color
+                if "border_width" not in args:
+                    args["border_width"] = self.border_width
+                if "border_color" not in args:
+                    args["border_color"] = self.border_color
+                
                 if self.write:
+                    if "justify" not in args:
+                        args["justify"] = self.justify
                     if self.padx==1: self.padx=0
-                    self.frame[i,j] = customtkinter.CTkEntry(self, border_width=self.border_width,
-                                                             text_color=self.text_color,
-                                                             border_color=self.border_color,
-                                                             font=self.font, justify=self.justify,
+                    self.frame[i,j] = customtkinter.CTkEntry(self,
+                                                             font=self.font,
                                                              corner_radius=0,
                                                              fg_color=fg, **args)
                     self.frame[i,j].insert("0", value)
@@ -148,12 +156,16 @@ class CTkTable(customtkinter.CTkFrame):
                             self.frame[i,j].configure(state="readonly")
     
                 else:
+                    if "anchor" not in args:
+                        args["anchor"] = self.anchor
+                    if "hover_color" not in args:
+                        args["hover_color"] = self.hover_color
+                    if "hover" not in args:
+                        args["hover"] = self.hover
                     self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners,
-                                                              text_color=self.text_color, anchor=self.anchor,
-                                                              border_color=self.border_color,
-                                                              font=self.font, border_width=self.border_width,
-                                                              corner_radius=corner_radius, hover=self.hover,
-                                                              fg_color=fg, text=value, hover_color=self.hover_color,
+                                                              font=self.font, 
+                                                              corner_radius=corner_radius,
+                                                              fg_color=fg, text=value, 
                                                               command=(lambda e=self.data[i,j]: self.command(e)) if self.command else None, **args)
                     self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
                 
