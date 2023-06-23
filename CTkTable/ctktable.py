@@ -18,6 +18,10 @@ class CTkTable(customtkinter.CTkFrame):
         colors: list = [None, None],
         orientation: str = "horizontal",
         color_phase: str = "horizontal",
+        border_width: int = 0,
+        text_color: str = None,
+        border_color: str = None,
+        font: tuple = None,
         header_color: str = None,
         corner_radius: int = 25,
         write: str = False,
@@ -25,6 +29,7 @@ class CTkTable(customtkinter.CTkFrame):
         anchor = "c",
         hover_color = None,
         hover = False,
+        justify = "center",
         **kwargs):
         
         super().__init__(master, fg_color="transparent")
@@ -41,11 +46,19 @@ class CTkTable(customtkinter.CTkFrame):
         self.phase = color_phase
         self.corner = corner_radius
         self.write = write
+        self.justify = justify
+        if self.write:
+            border_width = border_width=+1
         if hover_color:
             hover=True
+        self.anchor = anchor
         self.hover = hover
+        self.border_width = border_width
         self.hover_color = customtkinter.ThemeManager.theme["CTkButton"]["hover_color"] if hover_color is None else hover_color
         self.orient = orientation
+        self.border_color = customtkinter.ThemeManager.theme["CTkButton"]["border_color"] if border_color is None else border_color
+        self.text_color = customtkinter.ThemeManager.theme["CTkButton"]["text_color"] if text_color is None else text_color
+        self.font = font
         # if colors are None then use the default frame colors:
         self.data = {}
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if not self.colors[0] else self.colors[0]
@@ -121,7 +134,10 @@ class CTkTable(customtkinter.CTkFrame):
                 
                 if self.write:
                     if self.padx==1: self.padx=0
-                    self.frame[i,j] = customtkinter.CTkEntry(self,
+                    self.frame[i,j] = customtkinter.CTkEntry(self, border_width=self.border_width,
+                                                             text_color=self.text_color,
+                                                             border_color=self.border_color,
+                                                             font=self.font, justify=self.justify,
                                                              corner_radius=0,
                                                              fg_color=fg, **args)
                     self.frame[i,j].insert("0", value)
@@ -133,6 +149,9 @@ class CTkTable(customtkinter.CTkFrame):
     
                 else:
                     self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners,
+                                                              text_color=self.text_color, anchor=self.anchor,
+                                                              border_color=self.border_color,
+                                                              font=self.font, border_width=self.border_width,
                                                               corner_radius=corner_radius, hover=self.hover,
                                                               fg_color=fg, text=value, hover_color=self.hover_color,
                                                               command=(lambda e=self.data[i,j]: self.command(e)) if self.command else None, **args)
