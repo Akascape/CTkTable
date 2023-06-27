@@ -3,6 +3,7 @@
 # Author: Akash Bora
 
 import customtkinter
+import copy
 
 class CTkTable(customtkinter.CTkFrame):
     """ CTkTable Widget """
@@ -49,10 +50,12 @@ class CTkTable(customtkinter.CTkFrame):
         self.justify = justify
         if self.write:
             border_width = border_width=+1
-        if hover_color:
+        if hover_color is not None:
             hover=True
+        else:
+            hover=False
         self.anchor = anchor
-        self.hover = hover
+        self.hover = hover 
         self.border_width = border_width
         self.hover_color = customtkinter.ThemeManager.theme["CTkButton"]["hover_color"] if hover_color is None else hover_color
         self.orient = orientation
@@ -119,19 +122,18 @@ class CTkTable(customtkinter.CTkFrame):
                     except IndexError: value = " "
                 else:
                     value = " "
-
+                
                 if (i,j) in self.data.keys():
                     if self.data[i,j]["args"]: 
                         args = self.data[i,j]["args"]
                     else:
-                        args = kwargs
+                        args = copy.deepcopy(kwargs)
                 else:
-                    args = kwargs
+                    args = copy.deepcopy(kwargs)
                 
-                self.data[i,j] = {"row": i, "column" : j, "value" : value, "args": args }
+                self.data[i,j] = {"row": i, "column" : j, "value" : value, "args": args}
                 
                 args = self.data[i,j]["args"]
-                
 
                 if "text_color" not in args:
                     args["text_color"] = self.text_color
@@ -139,7 +141,9 @@ class CTkTable(customtkinter.CTkFrame):
                     args["border_width"] = self.border_width
                 if "border_color" not in args:
                     args["border_color"] = self.border_color
-                
+                if "fg_color" not in args:
+                    args["fg_color"] = fg
+
                 if self.write:
                     if "justify" not in args:
                         args["justify"] = self.justify
@@ -147,7 +151,7 @@ class CTkTable(customtkinter.CTkFrame):
                     self.frame[i,j] = customtkinter.CTkEntry(self,
                                                              font=self.font,
                                                              corner_radius=0,
-                                                             fg_color=fg, **args)
+                                                             **args)
                     self.frame[i,j].insert("0", value)
                     self.frame[i,j].bind("<Key>", lambda e, row=i, column=j, data=self.data: self.after(100, lambda: self.manipulate_data(row, column)))
                     self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
@@ -165,7 +169,7 @@ class CTkTable(customtkinter.CTkFrame):
                     self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners,
                                                               font=self.font, 
                                                               corner_radius=corner_radius,
-                                                              fg_color=fg, text=value, 
+                                                              text=value, 
                                                               command=(lambda e=self.data[i,j]: self.command(e)) if self.command else None, **args)
                     self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
                 
@@ -197,14 +201,14 @@ class CTkTable(customtkinter.CTkFrame):
         """ edit all parameters of a single row """
         for i in range(self.columns):
             self.frame[row, i].configure(**kwargs)
-            self.data[row, i]["args"] = kwargs
+            self.data[row, i]["args"].update(kwargs)
         self.update_data()
         
     def edit_column(self, column, **kwargs):
         """ edit all parameters of a single column """
         for i in range(self.rows):
             self.frame[i, column].configure(**kwargs)
-            self.data[i, column]["args"] = kwargs
+            self.data[i, column]["args"].update(kwargs)
         self.update_data()
         
     def update_values(self, values, **kwargs):
@@ -281,7 +285,7 @@ class CTkTable(customtkinter.CTkFrame):
             self.frame[row,column].configure(**kwargs)
         else:        
             self.frame[row,column].configure(text=value, **kwargs)
-        if kwargs: self.data[row,column]["args"] = kwargs
+        if kwargs: self.data[row,column]["args"].update(kwargs)
         self.update_data()
         
     def delete(self, row, column, **kwargs):
@@ -291,7 +295,7 @@ class CTkTable(customtkinter.CTkFrame):
             self.frame[row,column].configure(**kwargs)
         else:     
             self.frame[row,column].configure(text="", **kwargs)
-        if kwargs: self.data[row,column]["args"] = kwargs
+        if kwargs: self.data[row,column]["args"].update(kwargs)
         self.update_data()
         
     def get(self, row=None, column=None):
