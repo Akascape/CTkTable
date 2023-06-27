@@ -60,7 +60,7 @@ class CTkTable(customtkinter.CTkFrame):
         self.hover_color = customtkinter.ThemeManager.theme["CTkButton"]["hover_color"] if hover_color is None else hover_color
         self.orient = orientation
         self.border_color = customtkinter.ThemeManager.theme["CTkButton"]["border_color"] if border_color is None else border_color
-        self.text_color = customtkinter.ThemeManager.theme["CTkButton"]["text_color"] if text_color is None else text_color
+        self.text_color = customtkinter.ThemeManager.theme["CTkLabel"]["text_color"] if text_color is None else text_color
         self.font = font
         # if colors are None then use the default frame colors:
         self.data = {}
