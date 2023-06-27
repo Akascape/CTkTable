@@ -22,6 +22,8 @@ pip install CTkTable
 
 ### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkTable?&color=white&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkTable/archive/refs/heads/main.zip)
 
+_Dont forget to leave a ⭐_
+
 ## Usage
 ```python
 import customtkinter
