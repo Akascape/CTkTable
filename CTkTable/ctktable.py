@@ -122,7 +122,10 @@ class CTkTable(customtkinter.CTkFrame):
                     except IndexError: value = " "
                 else:
                     value = " "
-                
+                    
+                if value=="":
+                    value = " "
+                    
                 if (i,j) in self.data.keys():
                     if self.data[i,j]["args"]: 
                         args = self.data[i,j]["args"]
