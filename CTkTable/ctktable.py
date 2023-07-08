@@ -112,7 +112,7 @@ class CTkTable(customtkinter.CTkFrame):
                 else:
                     corners = [fg, fg, fg, fg]
                     corner_radius = 0
-                    
+ 
                 if self.values:
                     try:
                         if self.orient=="horizontal":
@@ -279,6 +279,95 @@ class CTkTable(customtkinter.CTkFrame):
         self.frame = {}
         self.draw_table()
         self.update_data()
+        
+    def delete_rows(self, indices=[]):
+        """ delete a particular row """
+        if len(indices)==0:
+            return
+        self.values = [v for i, v in enumerate(self.values) if i not in indices]
+        for i in indices:
+            for j in range(self.columns):
+                self.data[i, j]["args"] = ""
+        for i in self.frame.values():
+            i.destroy()
+        self.rows -= len(set(indices))
+        self.frame = {}
+        self.draw_table()
+        self.update_data()
+        
+    def delete_columns(self, indices=[]):
+        """ delete a particular column """
+        if len(indices)==0:
+            return
+        x = 0
+        
+        for k in self.values:
+            self.values[x] = [v for i, v in enumerate(k) if i not in indices]
+            x+=1
+        for i in indices:
+            for j in range(self.rows):
+                self.data[j, i]["args"] = ""
+                
+        for i in self.frame.values():
+            i.destroy()
+        self.columns -= len(set(indices))
+        self.frame = {}
+        self.draw_table()
+        self.update_data()
+        
+    def get_row(self, row):
+        return self.values[row]
+    
+    def get_column(self, column):
+        column_list = []
+        for i in self.values:
+            column_list.append(i[column])
+        return column_list
+
+    def select_row(self, row):
+        self.edit_row(row, fg_color=self.hover_color)
+        if self.orient!="horizontal":
+            if self.header_color:
+                self.edit_column(0, fg_color=self.header_color)
+        else:
+            if self.header_color:
+                self.edit_row(0, fg_color=self.header_color)
+        return self.get_row(row)
+    
+    def select_column(self, column):
+        self.edit_column(column, fg_color=self.hover_color)
+        if self.orient!="horizontal":
+            if self.header_color:
+                self.edit_column(0, fg_color=self.header_color)
+        else:
+            if self.header_color:
+                self.edit_row(0, fg_color=self.header_color)
+        return self.get_column(column)
+    
+    def deselect_row(self, row):
+        self.edit_row(row, fg_color=self.fg_color if row%2==0 else self.fg_color2)
+        if self.orient!="horizontal":
+            if self.header_color:
+                self.edit_column(0, fg_color=self.header_color)
+        else:
+            if self.header_color:
+                self.edit_row(0, fg_color=self.header_color)
+                
+    def deselect_column(self, column):
+        for i in range(self.rows):
+            self.frame[i,column].configure(fg_color=self.fg_color if i%2==0 else self.fg_color2)
+        if self.orient!="horizontal":
+            if self.header_color:
+                self.edit_column(0, fg_color=self.header_color)
+        else:
+            if self.header_color:
+                self.edit_row(0, fg_color=self.header_color)
+
+    def select(self, row, column):
+        self.frame[row,column].configure(fg_color=self.hover_color)
+
+    def deselect(self, row, column):
+        self.frame[row,column].configure(fg_color=self.fg_color if row%2==0 else self.fg_color2)
         
     def insert(self, row, column, value, **kwargs):
         """ insert value in a specific block [row, column] """
