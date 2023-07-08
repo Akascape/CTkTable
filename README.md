@@ -48,12 +48,22 @@ root.mainloop()
 - **.add_column(index, values)**
 - **.edit_row(row_num, *args)**: edit one full row at once
 - **.edit_column(column_num, *args)**: edit one full column at once
-- **.delete_row(index)**
-- **.delete_column(index)**
+- **.delete_row(index)**: remove one row
+- **.delete_column(index)**: remove one column
+- **.delete_rows(indices)**: remove mutliple rows
+- **.delete_columns(indices)**: remove multiple columns
+- **.select(row, column)**: select one cell
+- **.select_row(row)**: select a row
+- **.deselect_row(row)**: deselect a row
+- **.select_column(column)**: select a column
+- **.deselect_column(column)**: deselect a column
 - **.update_values(values)**: update all values at once
 - **.insert(row, column, value, *args)**: change specific index data
 - **.delete(row, column, *args)**: delete the data from specific index
 - **.get()**: get all values
+- **.get(row, column)**: get specific cell value
+- **.get_row(row)**: get all values of a specific row
+- **.get_column(column)**: get all values of a specific column
 - **.configure(arguments)**: change other table attributes
 
 _here, **args** means ctkbutton parameters which can also be passed_
@@ -71,6 +81,7 @@ _here, **args** means ctkbutton parameters which can also be passed_
 | pady | add internal padding in y |
 | colors | set two fg_colors for the table (list), eg: `colors=["yellow", "green"]` |
 | color_phase | set color phase based on rows or columns, eg: `color_phase="vertical"` |
+| orientation | change the orientation of table, `vertical or horizontal` |
 | header_color | define the topmost row color |
 | corner_radius | define the corner roundness of the table |
 | hover_color | enable hover effect on the cells |
