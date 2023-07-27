@@ -392,7 +392,7 @@ class CTkTable(customtkinter.CTkFrame):
         
     def get(self, row=None, column=None):
         if row and column:
-            return self.data[row,column]["values"]
+            return self.data[row,column]["value"]
         else:
             return self.values
     
