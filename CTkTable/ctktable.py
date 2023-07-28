@@ -31,6 +31,7 @@ class CTkTable(customtkinter.CTkFrame):
         hover_color = None,
         hover = False,
         justify = "center",
+        wraplength: int = 1000,
         **kwargs):
         
         super().__init__(master, fg_color="transparent")
@@ -55,6 +56,7 @@ class CTkTable(customtkinter.CTkFrame):
         else:
             hover=False
         self.anchor = anchor
+        self.wraplength = wraplength
         self.hover = hover 
         self.border_width = border_width
         self.hover_color = customtkinter.ThemeManager.theme["CTkButton"]["hover_color"] if hover_color is None else hover_color
@@ -137,7 +139,7 @@ class CTkTable(customtkinter.CTkFrame):
                 self.data[i,j] = {"row": i, "column" : j, "value" : value, "args": args}
                 
                 args = self.data[i,j]["args"]
-
+                
                 if "text_color" not in args:
                     args["text_color"] = self.text_color
                 if "border_width" not in args:
@@ -175,7 +177,7 @@ class CTkTable(customtkinter.CTkFrame):
                                                               text=value, 
                                                               command=(lambda e=self.data[i,j]: self.command(e)) if self.command else None, **args)
                     self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
-                
+                    self.frame[i,j]._text_label.config(wraplength=self.wraplength)
                 self.rowconfigure(i, weight=1)
                 self.columnconfigure(j, weight=1)
                 
@@ -200,18 +202,22 @@ class CTkTable(customtkinter.CTkFrame):
                 row_data.append(self.data[i,j]["value"])
             self.values.append(row_data)
             
-    def edit_row(self, row, **kwargs):
+    def edit_row(self, row, value=None, **kwargs):
         """ edit all parameters of a single row """
         for i in range(self.columns):
             self.frame[row, i].configure(**kwargs)
             self.data[row, i]["args"].update(kwargs)
+            if value:
+                self.insert(row, i, value)
         self.update_data()
         
-    def edit_column(self, column, **kwargs):
+    def edit_column(self, column, value=None, **kwargs):
         """ edit all parameters of a single column """
         for i in range(self.rows):
             self.frame[i, column].configure(**kwargs)
             self.data[i, column]["args"].update(kwargs)
+            if value:
+                self.insert(i, column, value)
         self.update_data()
         
     def update_values(self, values, **kwargs):
@@ -415,5 +421,7 @@ class CTkTable(customtkinter.CTkFrame):
             self.padx = kwargs.pop("padx")
         if "padx" in kwargs:
             self.pady = kwargs.pop("pady")
-        
+        if "wraplength" in kwargs:
+            self.wraplength = kwargs.pop("wraplength")
+            
         self.update_values(self.values, **kwargs)
