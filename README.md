@@ -85,6 +85,7 @@ _here, **args** means ctkbutton parameters which can also be passed_
 | header_color | define the topmost row color |
 | corner_radius | define the corner roundness of the table |
 | hover_color | enable hover effect on the cells |
+| wraplength | set the width of cell text |
 | **command** | specify a command when a table cell is pressed, [returns row, column, value] |
 | **other button parameters* | all other ctk button parameters can be passed |
 
