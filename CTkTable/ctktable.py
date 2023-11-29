@@ -397,7 +397,7 @@ class CTkTable(customtkinter.CTkFrame):
         self.update_data()
         
     def get(self, row=None, column=None):
-        if row and column:
+        if row != None and column != None:
             return self.data[row,column]["value"]
         else:
             return self.values
