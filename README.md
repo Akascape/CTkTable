@@ -14,7 +14,8 @@
 - edit each cell value and options
 - entry editing
 - can be used with scrollable frame
-
+- Lots of other data operarions
+  
 ## Installation
 ```
 pip install CTkTable
@@ -44,6 +45,7 @@ root.mainloop()
 ```
 
 ## Methods
+- **.insert(row, column, value, *args)**: change specific cell index data
 - **.add_row(index, values)**
 - **.add_column(index, values)**
 - **.edit_row(row_num, *args)**: edit one full row at once
@@ -52,13 +54,15 @@ root.mainloop()
 - **.delete_column(index)**: remove one column
 - **.delete_rows(indices)**: remove mutliple rows
 - **.delete_columns(indices)**: remove multiple columns
+- **.edit(row, column)**: edit specific cell without changing the value
 - **.select(row, column)**: select one cell
 - **.select_row(row)**: select a row
+- **.get_selected_row()**: get the values of the selected row
 - **.deselect_row(row)**: deselect a row
 - **.select_column(column)**: select a column
+- **.get_selected_column()**: get the values of selected column
 - **.deselect_column(column)**: deselect a column
 - **.update_values(values)**: update all values at once
-- **.insert(row, column, value, *args)**: change specific index data
 - **.delete(row, column, *args)**: delete the data from specific index
 - **.get()**: get all values
 - **.get(row, column)**: get specific cell value
@@ -86,6 +90,7 @@ _here, **args** means ctkbutton parameters which can also be passed_
 | corner_radius | define the corner roundness of the table |
 | hover_color | enable hover effect on the cells |
 | wraplength | set the width of cell text |
+| justify | anchor the position of the cell text |
 | **command** | specify a command when a table cell is pressed, [returns row, column, value] |
 | **other button parameters* | all other ctk button parameters can be passed |
 
