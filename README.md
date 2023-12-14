@@ -14,7 +14,7 @@
 - edit each cell value and options
 - entry editing
 - can be used with scrollable frame
-- Lots of other data operarions
+- Lots of other data operations
   
 ## Installation
 ```
