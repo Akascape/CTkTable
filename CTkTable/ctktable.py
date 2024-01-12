@@ -106,16 +106,16 @@ class CTkTable(customtkinter.CTkFrame):
                 corner_radius = self.corner
                 if i==0 and j==0:
                     corners = ["", fg, fg, fg]
-                    hover_modify = True
+                    hover_modify = self.hover
                 elif i==self.rows-1 and j==self.columns-1:
                     corners = [fg ,fg, "", fg]
-                    hover_modify = True
+                    hover_modify = self.hover
                 elif i==self.rows-1 and j==0:
                     corners = [fg ,fg, fg, ""]
-                    hover_modify = True
+                    hover_modify = self.hover
                 elif i==0 and j==self.columns-1:
                     corners = [fg, "", fg, fg]
-                    hover_modify = True
+                    hover_modify = self.hover
                 else:
                     corners = [fg, fg, fg, fg]
                     corner_radius = 0
@@ -420,7 +420,17 @@ class CTkTable(customtkinter.CTkFrame):
 
     def select(self, row, column):
         """ select any cell """
-        self.frame[row,column].configure(fg_color=self.hover_color)
+        if row == 0 and column == 0:
+            hover_corners = ["", self.hover_color, self.hover_color, self.hover_color]
+        elif row == self.rows - 1 and column == self.columns - 1:
+            hover_corners = [self.hover_color, self.hover_color, "", self.hover_color]
+        elif row == self.rows - 1 and column == 0:
+            hover_corners=[self.hover_color, self.hover_color, self.hover_color, ""]
+        elif row == 0 and column == self.columns - 1:
+            hover_corners = [self.hover_color, "", self.hover_color, self.hover_color]
+        else:
+            hover_corners = [self.hover_color, self.hover_color, self.hover_color, self.hover_color]
+        self.frame[row, column].configure(background_corner_colors=hover_corners, fg_color=self.hover_color)
 
     def deselect(self, row, column):
         """ deselect any cell """
