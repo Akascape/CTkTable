@@ -6,6 +6,6 @@ This is a custom table widget for customtkinter.
 Homepage: https://github.com/Akascape/CTkTable
 """
 
-__version__ = '0.9'
+__version__ = '1.0'
 
 from .ctktable import CTkTable
