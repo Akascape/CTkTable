@@ -15,7 +15,9 @@ class CTkTable(customtkinter.CTkFrame):
         column: int = None,
         padx: int = 1, 
         pady: int = 0,
-        values: list = [[None]],
+        width: int = 140,
+        height: int = 28,
+        values: list = None,
         colors: list = [None, None],
         orientation: str = "horizontal",
         color_phase: str = "horizontal",
@@ -35,10 +37,15 @@ class CTkTable(customtkinter.CTkFrame):
         **kwargs):
         
         super().__init__(master, fg_color="transparent")
-
+        
+        if values is None:
+            values = [[None,None],[None,None]]
+            
         self.master = master # parent widget
         self.rows = row if row else len(values) # number of default rows
         self.columns = column if column else len(values[0])# number of default columns
+        self.width = width
+        self.height = height
         self.padx = padx # internal padding between the rows/columns
         self.pady = pady
         self.command = command
@@ -49,6 +56,8 @@ class CTkTable(customtkinter.CTkFrame):
         self.corner = corner_radius
         self.write = write
         self.justify = justify
+        self.binded_objects = []
+            
         if self.write:
             border_width = border_width=+1
             
@@ -62,6 +71,10 @@ class CTkTable(customtkinter.CTkFrame):
         self.hover_color = customtkinter.ThemeManager.theme["CTkButton"]["hover_color"] if hover_color is None else hover_color
         self.orient = orientation
         self.border_color = customtkinter.ThemeManager.theme["CTkButton"]["border_color"] if border_color is None else border_color
+        self.inside_frame = customtkinter.CTkFrame(self, border_width=0, fg_color="transparent")
+        super().configure(border_color=self.border_color, border_width=self.border_width, corner_radius=self.corner)
+        self.inside_frame.pack(expand=True, fill="both", padx=self.border_width, pady=self.border_width)
+
         self.text_color = customtkinter.ThemeManager.theme["CTkLabel"]["text_color"] if text_color is None else text_color
         self.font = font
         # if colors are None then use the default frame colors:
@@ -104,23 +117,47 @@ class CTkTable(customtkinter.CTkFrame):
                             fg = self.header_color
 
                 corner_radius = self.corner
+                if (self.border_width>=5) and (self.corner>=5):
+                    tr = self.border_color
+                else:
+                    tr = ""
                 if i==0 and j==0:
-                    corners = ["", fg, fg, fg]
+                    corners = [tr, fg, fg, fg]
                     hover_modify = self.hover
+        
                 elif i==self.rows-1 and j==self.columns-1:
-                    corners = [fg ,fg, "", fg]
+                    corners = [fg ,fg, tr, fg]
                     hover_modify = self.hover
+        
                 elif i==self.rows-1 and j==0:
-                    corners = [fg ,fg, fg, ""]
+                    corners = [fg ,fg, fg, tr]
                     hover_modify = self.hover
+       
                 elif i==0 and j==self.columns-1:
-                    corners = [fg, "", fg, fg]
+                    corners = [fg, tr, fg, fg]
                     hover_modify = self.hover
+ 
                 else:
                     corners = [fg, fg, fg, fg]
                     corner_radius = 0
                     hover_modify = False
- 
+            
+                if i==0:
+                    pady = (0, self.pady)
+                else:
+                    pady = self.pady
+                    
+                if j==0:
+                    padx = (0, self.padx)
+                else:
+                    padx = self.padx
+                    
+                if i==self.rows-1:
+                    pady = (self.pady,0)
+                
+                if j==self.columns-1:
+                    padx = (self.padx,0)
+
                 if self.values:
                     try:
                         if self.orient=="horizontal":
@@ -149,24 +186,46 @@ class CTkTable(customtkinter.CTkFrame):
                 
                 if "text_color" not in args:
                     args["text_color"] = self.text_color
-                if "border_width" not in args:
-                    args["border_width"] = self.border_width
-                if "border_color" not in args:
-                    args["border_color"] = self.border_color
+                if "height" not in args:
+                    args["height"] = self.height
+                if "width" not in args:
+                    args["width"] = self.width
                 if "fg_color" not in args:
                     args["fg_color"] = fg
-              
+                if args["fg_color"]!=fg:
+                    args["fg_color"] = fg
+                if "corner_radius" in args:
+                    del args["corner_radius"]
+                if "border_color" in args:
+                    del args["border_color"]
+                if "border_width" in args:
+                    del args["border_width"]
+                if "color_phase" in args:
+                    del args["color_phase"]
+                if "orientation" in args:
+                    del args["orientation"]
+                if "write" in args:
+                    del args["write"]
+       
                 if self.write:
+                    if "anchor" in args:
+                        del args["anchor"] 
+                    if "hover_color" in args:
+                        del args["hover_color"] 
+                    if "hover" in args:
+                        del args["hover"]
                     if "justify" not in args:
                         args["justify"] = self.justify
-                    if self.padx==1: self.padx=0
-                    self.frame[i,j] = customtkinter.CTkEntry(self,
+                    
+                    self.frame[i,j] = customtkinter.CTkEntry(self.inside_frame,
                                                              font=self.font,
                                                              corner_radius=0,
                                                              **args)
-                    self.frame[i,j].insert("0", value)
+                    if value is None:
+                        value = " "
+                    self.frame[i,j].insert(0, str(value))
                     self.frame[i,j].bind("<Key>", lambda e, row=i, column=j, data=self.data: self.after(100, lambda: self.manipulate_data(row, column)))
-                    self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
+                    self.frame[i,j].grid(column=j, row=i, padx=padx, pady=pady, sticky="nsew")
                     
                     if self.header_color:
                         if i==0:
@@ -179,38 +238,58 @@ class CTkTable(customtkinter.CTkFrame):
                         args["hover_color"] = self.hover_color
                     if "hover" not in args:
                         args["hover"] = self.hover
-         
-                    self.frame[i,j] = customtkinter.CTkButton(self, background_corner_colors=corners,
+                    if "justify" in args:
+                        anchor =  args["justify"]
+                        if anchor=="center":
+                            anchor="c"
+                        elif anchor=="left":
+                            anchor="w"
+                        elif anchor=="right":
+                            anchor="e"
+                        args.update({"anchor": anchor})
+                        del args["justify"]
+                    if value is None:
+                        value = " "
+                    self.frame[i,j] = customtkinter.CTkButton(self.inside_frame, background_corner_colors=corners,
                                                               font=self.font, 
                                                               corner_radius=corner_radius,
                                                               text=value,
+                                                              border_width=0,
                                                               command=(lambda e=self.data[i,j]: self.command(e)) if self.command else None, **args)
-                    self.frame[i,j].grid(column=j, row=i, padx=self.padx, pady=self.pady, sticky="nsew")
-                    self.frame[i,j]._text_label.config(wraplength=self.wraplength)
+                    self.frame[i,j].grid(column=j, row=i, padx=padx, pady=pady, sticky="nsew")
+                    if self.frame[i,j]._text_label is not None:
+                        self.frame[i,j]._text_label.config(wraplength=self.wraplength)
                     
                     if hover_modify:
                         self.dynamic_hover(self.frame[i,j], i, j)
                         
                 self.rowconfigure(i, weight=1)
                 self.columnconfigure(j, weight=1)
+        for x in self.frame:
+            for y in self.binded_objects:
+                self.frame[x].bind(*y)
         
     def dynamic_hover(self, frame, i, j):
         """ internal function to change corner cell colors """
         self.corner_buttons[i,j] = frame
         fg = self.data[i,j]["args"]["fg_color"]
         hv = self.data[i,j]["args"]["hover_color"]
+        if (self.border_width>=5) and (self.corner>=5):
+            tr = self.border_color
+        else:
+            tr = ""
         if i==0 and j==0:
-            corners = ["", fg, fg, fg]
-            hover_corners = ["", hv, hv, hv]
+            corners = [tr, fg, fg, fg]
+            hover_corners = [tr, hv, hv, hv]
         elif i==self.rows-1 and j==self.columns-1:
-            corners = [fg ,fg, "", fg]
-            hover_corners = [hv, hv, "", hv]
+            corners = [fg ,fg, tr, fg]
+            hover_corners = [hv, hv, tr, hv]
         elif i==self.rows-1 and j==0:
-            corners = [fg ,fg, fg, ""]
-            hover_corners = [hv, hv, hv, ""]
+            corners = [fg ,fg, fg, tr]
+            hover_corners = [hv, hv, hv, tr]
         elif i==0 and j==self.columns-1:
-            corners = [fg, "", fg, fg]
-            hover_corners = [hv, "", hv, hv]
+            corners = [fg, tr, fg, fg]
+            hover_corners = [hv, tr, hv, hv]
         else:
             return
         
@@ -306,6 +385,8 @@ class CTkTable(customtkinter.CTkFrame):
         
     def delete_row(self, index=None):
         """ delete a particular row """
+        if len(self.values)==1:
+            return
         if index is None or index>=len(self.values):
             index = len(self.values)-1
         self.values.pop(index)
@@ -315,11 +396,17 @@ class CTkTable(customtkinter.CTkFrame):
         self.frame = {}
         self.draw_table()
         self.update_data()
+
         
     def delete_column(self, index=None):
         """ delete a particular column """
+        if len(self.values[0])==1:
+            return
         if index is None or index>=len(self.values[0]):
-            index = len(self.values)-1
+            try:
+                index = len(self.values)-1
+            except IndexError:
+                return
         for i in self.values:
             i.pop(index)
         for i in self.frame.values():
@@ -328,6 +415,7 @@ class CTkTable(customtkinter.CTkFrame):
         self.frame = {}
         self.draw_table()
         self.update_data()
+
         
     def delete_rows(self, indices=[]):
         """ delete a particular row """
@@ -506,6 +594,13 @@ class CTkTable(customtkinter.CTkFrame):
             self.colors = kwargs.pop("colors")
             self.fg_color = self.colors[0]
             self.fg_color2 = self.colors[1]
+        if "fg_color" in kwargs:
+            self.colors = (kwargs["fg_color"], kwargs.pop("fg_color"))
+            self.fg_color = self.colors[0]
+            self.fg_color2 = self.colors[1]
+        if "bg_color" in kwargs:
+            super().configure(bg_color=kwargs["bg_color"])
+            self.inside_frame.configure(fg_color=kwargs["bg_color"])
         if "header_color" in kwargs:
             self.header_color = kwargs.pop("header_color")
         if "rows" in kwargs:
@@ -516,7 +611,7 @@ class CTkTable(customtkinter.CTkFrame):
             self.values = kwargs.pop("values")
         if "padx" in kwargs:
             self.padx = kwargs.pop("padx")
-        if "padx" in kwargs:
+        if "pady" in kwargs:
             self.pady = kwargs.pop("pady")
         if "wraplength" in kwargs:
             self.wraplength = kwargs.pop("wraplength")
@@ -531,11 +626,92 @@ class CTkTable(customtkinter.CTkFrame):
             self.text_color = kwargs.pop("text_color")
         if "border_width" in kwargs:
             self.border_width = kwargs.pop("border_width")
+            super().configure(border_width=self.border_width)
+            self.inside_frame.pack(expand=True, fill="both", padx=self.border_width, pady=self.border_width)
         if "border_color" in kwargs:
             self.border_color = kwargs.pop("border_color")
+            super().configure(border_color=self.border_color)
         if "hover" in kwargs:
             self.hover = kwargs.pop("hover")
         if "anchor" in kwargs:
             self.anchor = kwargs.pop("anchor")
+        if "corner_radius" in kwargs:
+            self.corner = kwargs.pop("corner_radius")
+            super().configure(corner_radius=self.corner)
+        if "color_phase" in kwargs:
+            self.phase = kwargs.pop("color_phase")
+        if "justify" in kwargs:
+            self.justify = kwargs.pop("justify")
+        if "orientation" in kwargs:
+            self.orient = kwargs.pop("orientation")
+        if "write" in kwargs:
+            self.write = kwargs.pop("write")
+        if "width" in kwargs:
+            self.width = kwargs.pop("width")
+        if "height" in kwargs:
+            self.height = kwargs.pop("height")
             
         self.update_values(self.values, **kwargs)
+
+    def cget(self, param):
+        if param=="width":
+            return self.frame[0,0].winfo_reqwidth()
+        if param=="height":
+            return self.frame[0,0].winfo_reqheight()
+        if param=="colors":
+            return (self.fg_color, self.fg_color2)
+        if param=="hover_color":
+            return self.hover_color
+        if param=="text_color":
+            return self.text_color
+        if param=="border_width":
+            return self.border_width
+        if param=="border_color":
+            return self.border_color
+        if param=="hover":
+            return self.hover
+        if param=="anchor":
+            return self.anchor
+        if param=="wraplength":
+            return self.wraplength
+        if param=="padx":
+            return self.padx
+        if param=="pady":
+            return self.pady
+        if param=="header_color":
+            return self.header_color
+        if param=="row":
+            return self.rows
+        if param=="column":
+            return self.columns
+        if param=="values":
+            return self.values
+        if param=="color_phase":
+            return self.phase
+        if param=="justify":
+            return self.justify
+        if param=="orientation":
+            return self.orient
+        if param=="write":
+            return self.write
+        
+        return super().cget(param)
+    
+    def bind(self, sequence: str = None, command = None, add = True):
+        """ bind all cells """
+        self.binded_objects.append([sequence, command, add])
+        
+        super().bind(sequence, command, add)
+        for i in self.frame:
+            self.frame[i].bind(sequence, command, add)
+        self.inside_frame.bind(sequence, command, add)
+        
+    def unbind(self, sequence: str = None, funcid: str = None):
+        for i in self.binded_objects:
+            if sequence in i:
+                self.binded_objects.remove(i)
+                
+        super().unbind(sequence, funcid)
+        for i in self.frame:
+            self.frame[i].unbind(sequence, funcid)
+        self.inside_frame.unbind(sequence, funcid)
