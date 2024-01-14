@@ -97,6 +97,8 @@ class CTkTable(customtkinter.CTkFrame):
         """ draw the table """
         for i in range(self.rows):
             for j in range(self.columns):
+                self.inside_frame.grid_rowconfigure(i, weight=1)
+                self.inside_frame.grid_columnconfigure(j, weight=1)
                 if self.phase=="horizontal":
                     if i%2==0:
                         fg = self.fg_color
