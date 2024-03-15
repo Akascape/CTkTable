@@ -95,6 +95,8 @@ class CTkTable(customtkinter.CTkFrame):
     def draw_table(self, **kwargs):
 
         """ draw the table """
+        self.rows = len(values)
+        self.columns = len(values[0])
         for i in range(self.rows):
             for j in range(self.columns):
                 self.inside_frame.grid_rowconfigure(i, weight=1)
