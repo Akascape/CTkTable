@@ -1,29 +1,27 @@
 # CTkTable
 
-**Here is a quick and simple table widget having all the basic features.**
+**A simple and feature-rich table widget for CustomTkinter.**
 
 ![Screenshot](https://user-images.githubusercontent.com/89206401/233420929-bf210cb3-5b5f-49b2-ba7a-f01d187e72cf.jpg)
 
 ## Features:
-- Add columns/rows
-- Delete columns/rows
+- Add and delete columns/rows
 - Edit rows/columns at once
-- Insert values to specific cell
-- delete values from specific cell
-- update all values at once
-- edit each cell value and options
-- entry editing
-- can be used with scrollable frame
-- Lots of other data operations
-  
+- Insert or remove values from specific cells
+- Update all values dynamically
+- Entry editing support
+- Scrollable frame support
+- Color customization and styling options
+
 ## Installation
+```sh
+git clone https://github.com/Akascape/CTkTable.git
 ```
-pip install CTkTable
-```
+Then, manually move the cloned folder to your script directory.
 
-### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkTable?&color=white&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkTable/archive/refs/heads/main.zip)
+### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkTable?&color=white&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge" width="400">](https://github.com/Akascape/CTkTable/archive/refs/heads/main.zip)
 
-_Dont forget to leave a ⭐_
+_Don't forget to leave a ⭐_
 
 ## Usage
 ```python
@@ -45,54 +43,60 @@ root.mainloop()
 ```
 
 ## Methods
-- **.insert(row, column, value, *args)**: change specific cell index data
-- **.add_row(index, values)**
-- **.add_column(index, values)**
-- **.edit_row(row_num, *args)**: edit one full row at once
-- **.edit_column(column_num, *args)**: edit one full column at once
-- **.delete_row(index)**: remove one row
-- **.delete_column(index)**: remove one column
-- **.delete_rows(indices)**: remove mutliple rows
-- **.delete_columns(indices)**: remove multiple columns
-- **.edit(row, column)**: edit specific cell without changing the value
-- **.select(row, column)**: select one cell
-- **.select_row(row)**: select a row
-- **.get_selected_row()**: get the values of the selected row
-- **.deselect_row(row)**: deselect a row
-- **.select_column(column)**: select a column
-- **.get_selected_column()**: get the values of selected column
-- **.deselect_column(column)**: deselect a column
-- **.update_values(values)**: update all values at once
-- **.delete(row, column, *args)**: delete the data from specific index
-- **.get()**: get all values
-- **.get(row, column)**: get specific cell value
-- **.get_row(row)**: get all values of a specific row
-- **.get_column(column)**: get all values of a specific column
-- **.configure(arguments)**: change other table attributes
-
-_here, **args** means ctkbutton parameters which can also be passed_
-
-**Note: treat all the table cells as a ctkbutton class**
+- **.insert(row, column, value, *args)**: Change specific cell data
+- **.add_row(index, values)**: Add a new row at the specified index
+- **.add_column(index, values)**: Add a new column at the specified index
+- **.edit_row(row_num, *args)**: Edit an entire row at once
+- **.edit_column(column_num, *args)**: Edit an entire column at once
+- **.delete_row(index)**: Remove one row
+- **.delete_column(index)**: Remove one column
+- **.delete_rows(indices)**: Remove multiple rows
+- **.delete_columns(indices)**: Remove multiple columns
+- **.edit(row, column)**: Edit a specific cell without changing its value
+- **.select(row, column)**: Select a cell
+- **.select_row(row)**: Select a row
+- **.get_selected_row()**: Get values of the selected row
+- **.deselect_row(row)**: Deselect a row
+- **.select_column(column)**: Select a column
+- **.get_selected_column()**: Get values of the selected column
+- **.deselect_column(column)**: Deselect a column
+- **.update_values(values)**: Update all values at once
+- **.delete(row, column, *args)**: Delete data from a specific index
+- **.get()**: Get all table values
+- **.get(row, column)**: Get value from a specific cell
+- **.get_row(row)**: Get all values from a specific row
+- **.get_column(column)**: Get all values from a specific column
+- **.configure(arguments)**: Change table attributes dynamically
 
 ## Arguments
 | Parameter | Description |
 |-----------| ------------|
-| **master** | parent widget  |
-| **values** | the default values for table |
-| row | **optional**, set number of default rows |
-| column | **optional**, set number of default columns |
-| padx | add internal padding in x |
-| pady | add internal padding in y |
-| colors | set two fg_colors for the table (list), eg: `colors=["yellow", "green"]` |
-| color_phase | set color phase based on rows or columns, eg: `color_phase="vertical"` |
-| orientation | change the orientation of table, `vertical or horizontal` |
-| header_color | define the topmost row color |
-| corner_radius | define the corner roundness of the table |
-| hover_color | enable hover effect on the cells |
-| wraplength | set the width of cell text |
-| justify | anchor the position of the cell text |
-| **command** | specify a command when a table cell is pressed, [returns row, column, value] |
-| **other button parameters* | all other ctk button parameters can be passed |
+| **master** | Parent widget |
+| **values** | Default values for the table |
+| row | **Optional**, set the number of default rows |
+| column | **Optional**, set the number of default columns |
+| padx | Internal padding in x |
+| pady | Internal padding in y |
+| colors | Set foreground colors for the table (list), e.g., `colors=["yellow", "green"]` |
+| color_phase | Set color phase based on rows or columns, e.g., `color_phase="vertical"` |
+| orientation | Change table orientation (`vertical` or `horizontal`) |
+| header_color | Define the topmost row color |
+| corner_radius | Define the corner roundness of the table |
+| hover_color | Enable hover effect on the cells |
+| wraplength | Set the width of cell text |
+| justify | Align text in table cells |
+| **command** | Specify a function to be called when a cell is clicked ([returns row, column, value]) |
+| **other button parameters** | All other `ctkbutton` parameters can be passed |
 
-Note: This library is at early stage so there can be some performance issues. 
-### Thanks for visiting! Hope it will help :)
+**Note:** This library is in its early stages, so there may be some performance issues.
+
+### Additional Features
+- `TableGenerator`: A powerful image-based table generator for rendering tables in PIL (**Recommended: Faster and more efficient**)
+- `CTkTableMini`: A lightweight version for smaller applications
+
+
+---
+### Contributions by [MustafaHilmiYAVUZHAN](https://github.com/MustafaHilmiYAVUZHAN)
+
+### Thanks for visiting! Hope it helps! 🚀
+

@@ -344,7 +344,7 @@ class CTkTable(customtkinter.CTkFrame):
                 self.dynamic_hover(self.corner_buttons[i, column], i, column)
         self.update_data()
         
-    def update_values(self, values, **kwargs):
+    def update_values_old(self, values, **kwargs):
         """ update all values at once """
         for i in self.frame.values():
             i.destroy()
@@ -352,6 +352,24 @@ class CTkTable(customtkinter.CTkFrame):
         self.values = values
         self.draw_table(**kwargs)
         self.update_data()
+    def update_values(self, values, **kwargs):
+        """ update all values at once 
+        0.2 second per 250 Button 
+        if Write==False"""
+        if self.write:
+            self.update_values_old()
+        else:
+            for i in range(self.rows):
+                for j in range(self.columns):
+                    try:
+                            
+                        value = values[i][j]
+                    except IndexError: value = " "
+                    self.frame[i,j].configure(text=value)
+                    #self.frame[i,j].update()
+            self.values = values
+            self.draw_table(**kwargs)
+            self.update_data()
         
     def add_row(self, values, index=None, **kwargs):
         """ add a new row """
@@ -717,3 +735,143 @@ class CTkTable(customtkinter.CTkFrame):
         for i in self.frame:
             self.frame[i].unbind(sequence, funcid)
         self.inside_frame.unbind(sequence, funcid)
+
+from customtkinter import CTkFrame,ThemeManager,CTkButton
+class CTkTableMini(CTkFrame):
+    """ CTkTableMini Widget """
+    
+    def __init__(
+        self,
+        master: any,
+        row: int = None,
+        column: int = None,
+        padx: int = 1, 
+        pady: int = 0,
+        width: int = 140,
+        height: int = 28,
+        values: list = None,
+        colors: list = [None, None],
+        orientation: str = "horizontal",
+        color_phase: str = "horizontal",
+        border_width: int = 0,
+        text_color: str or tuple = None,
+        border_color: str or tuple = None,
+        font: tuple = None,
+        header_color: str or tuple = None,
+        corner_radius: int = 25,
+        write: str = False,
+        command = None,
+        anchor: str = "c",
+        hover_color: str or tuple = None,
+        hover: bool = False,
+        justify: str = "center",
+        wraplength: int = 1000,
+        column_widths : list =None,
+        *arg,
+        **kwargs):
+
+        self.arg=arg
+        self.command = command
+        self.values = values
+        self.column_widths=column_widths
+        self.rows = row if row else len(values) # number of default rows
+        self.columns = column if column else len(values[0])
+        self.hover_color = ThemeManager.theme["CTkButton"]["hover_color"] if hover_color is None else hover_color
+        self.font=font
+        self.header=header_color
+        self.colors=colors
+        self.border_color = ThemeManager.theme["CTkButton"]["border_color"] if border_color is None else border_color
+        
+        self.fg_color = ThemeManager.theme["CTkFrame"]["fg_color"] if not self.colors[0] else self.colors[0]
+        self.fg_color2 = ThemeManager.theme["CTkFrame"]["top_fg_color"] if not self.colors[1] else self.colors[1]
+       
+        if self.colors[0] is None and self.colors[1] is None:
+            if self.fg_color==self.master.cget("fg_color"):
+                self.fg_color = ThemeManager.theme["CTk"]["fg_color"]
+            if self.fg_color2==self.master.cget("fg_color"):
+                self.fg_color2 = ThemeManager.theme["CTk"]["fg_color"]
+        self.fg_color_back=ThemeManager.theme["CTkFrame"]["fg_color"]
+        super().__init__(master, fg_color=ThemeManager.theme["CTkFrame"]["fg_color"])
+        super().configure(border_color=self.border_color, border_width=border_width, corner_radius=corner_radius)
+        self.cells={}
+        self.draw()
+    def draw_table(self,columns,column_widths,colors,values,font,us_command,start_row):
+        frame={}
+        
+        rows=len(values)
+        for i in range(rows):
+                        
+            fg=colors[(i+start_row)%2]
+            for j in range(columns):
+                width = column_widths[j] if j < len(column_widths) else 20
+                try:
+                        
+                    value = self.values[i+start_row][j]
+                except IndexError: value = " "
+                    
+                
+            
+                frame[i+start_row,j] = CTkButton(self,
+                                                              font=font, 
+                                                              text=value,
+                                                              width=width,
+                                                              border_width=0,
+                                                              corner_radius=0,
+                                                              fg_color=fg,
+                                                              hover=False,
+                                                              
+                                                              background_corner_colors=[fg,fg,fg,fg],
+                                                              command = lambda i=i+start_row,j=j,v=value: us_command(v,i,j))
+
+                
+        return frame
+    def draw(self):
+        """result=[]
+        count_of_5 = self.rows // 5
+        remainder = self.rows % 5
+        result = [5] * count_of_5
+        if remainder != 0:
+            result.append(remainder)
+        start_row=0
+
+        for i in result:
+            
+            self.cells.update(self.draw_table(columns=self.columns,column_widths=self.column_widths,colors=self.colors,values=self.values[start_row:start_row+i],font=self.font,us_command=self.us_command,start_row=start_row))
+            start_row+=i
+            
+            #maybe Threading"""
+        self.cells.update(self.draw_table(columns=self.columns,column_widths=self.column_widths,colors=self.colors,values=self.values,font=self.font,us_command=self.us_command,start_row=0))
+        if self.header is not None:
+            for j in range(self.columns):
+                self.cells[0,j].configure(fg_color=self.header)
+            self.cells[0,0].configure(corner_radius=10,background_corner_colors=[self.fg_color_back,self.header,self.header,self.header])
+            self.cells[0,self.columns-1].configure(corner_radius=10,background_corner_colors=[self.header,self.fg_color_back,self.header,self.header])
+        else:
+            self.cells[0,0].configure(corner_radius=10,background_corner_colors=[self.fg_color_back,self.fg_color,self.fg_color,self.fg_color])
+            self.cells[0,self.columns-1].configure(corner_radius=10,background_corner_colors=[self.fg_color,self.fg_color_back,self.fg_color,self.fg_color])
+        
+        
+        for i in range(self.rows):
+            for j in range(self.columns):
+                self.cells[i,j].grid(column=j, row=i, padx=1, pady=1, sticky="nsew")
+
+    def us_command(self,value,i,j):
+        self.command({"value":value,"row":i+1,"column":j+1})
+
+    def update_values_old(self,values):
+        for i in self.cells.values():
+            i.destroy()
+        self.frame = {}
+        self.values = values
+        self.rows = len(values) # number of default rows
+        self.columns = len(values[0])
+        self.draw()
+    def update_values(self,values):
+        for i in range(self.rows):
+            for j in range(self.columns):
+                try:
+                            
+                    value = values[i][j]
+                except IndexError: value = " "
+                self.cells[i,j].configure(text=value)
+                self.cells[i,j].update()
