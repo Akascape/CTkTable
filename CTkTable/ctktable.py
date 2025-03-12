@@ -34,6 +34,7 @@ class CTkTable(customtkinter.CTkFrame):
         hover: bool = False,
         justify: str = "center",
         wraplength: int = 1000,
+        empty_string_replacement: str = " ", # isghe 20250312_1637: space for backwards compatibility
         **kwargs):
         
         super().__init__(master, fg_color="transparent")
@@ -90,6 +91,7 @@ class CTkTable(customtkinter.CTkFrame):
             
         self.frame = {}
         self.corner_buttons = {}
+        self.empty_string_replacement = empty_string_replacement
         self.draw_table(**kwargs)
         
     def draw_table(self, **kwargs):
@@ -166,12 +168,12 @@ class CTkTable(customtkinter.CTkFrame):
                             value = self.values[i][j]
                         else:
                             value = self.values[j][i]
-                    except IndexError: value = " "
+                    except IndexError: value = self.empty_string_replacement
                 else:
-                    value = " "
+                    value = self.empty_string_replacement
                     
                 if value=="":
-                    value = " "
+                    value = self.empty_string_replacement
                 
                 if (i,j) in self.data.keys():
                     if self.data[i,j]["args"]:
@@ -224,7 +226,7 @@ class CTkTable(customtkinter.CTkFrame):
                                                              corner_radius=0,
                                                              **args)
                     if value is None:
-                        value = " "
+                        value = self.empty_string_replacement
                     self.frame[i,j].insert(0, str(value))
                     self.frame[i,j].bind("<Key>", lambda e, row=i, column=j, data=self.data: self.after(100, lambda: self.manipulate_data(row, column)))
                     self.frame[i,j].grid(column=j, row=i, padx=padx, pady=pady, sticky="nsew")
@@ -251,7 +253,7 @@ class CTkTable(customtkinter.CTkFrame):
                         args.update({"anchor": anchor})
                         del args["justify"]
                     if value is None:
-                        value = " "
+                        value = self.empty_string_replacement
                     self.frame[i,j] = customtkinter.CTkButton(self.inside_frame, background_corner_colors=corners,
                                                               font=self.font, 
                                                               corner_radius=corner_radius,

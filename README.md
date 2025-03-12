@@ -91,6 +91,7 @@ _here, **args** means ctkbutton parameters which can also be passed_
 | hover_color | enable hover effect on the cells |
 | wraplength | set the width of cell text |
 | justify | anchor the position of the cell text |
+| empty_string_replacement | replace None or Empty string with empty_string_replacement (default is a space " ")
 | **command** | specify a command when a table cell is pressed, [returns row, column, value] |
 | **other button parameters* | all other ctk button parameters can be passed |
 
